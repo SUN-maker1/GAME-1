@@ -198,6 +198,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!Input.GetMouseButtonDown(0)) return;
 
+        // 附近有可互动物体时，左键优先触发互动而非攻击
+        if (InteractionSystem.AnyInteractableInRange) return;
+
         if (animator == null || !hasAttackTrigger)
         {
             // 只警告一次：每帧点鼠标都刷屏太吵

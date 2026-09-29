@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2308134552034322580}
   - component: {fileID: 1114113471440459572}
   - component: {fileID: 5289379941647003064}
+  - component: {fileID: 1971652899012281307}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -196,11 +197,11 @@ MonoBehaviour:
   mirrorSpriteRight: 0
   boundary:
     serializedVersion: 2
-    x: -8.9
-    y: -7.855
-    width: 17.8
-    height: 15.71
-  useBoundary: 1
+    x: -32
+    y: -32
+    width: 64
+    height: 64
+  useBoundary: 0
 --- !u!95 &5289379941647003064
 Animator:
   serializedVersion: 5
@@ -222,3 +223,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+
+--- !u!114 &1971652899012281307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2342929762911554001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2febb5b3a5ac75840aaaa7d482c2c54f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useFootPosition: 1
+  orderBase: 20000
+  orderPerUnit: 100
+  orderOffset: 0
+  includeChildren: 1
+  sortingLayerName: Entities
+  updateEveryFrame: 1

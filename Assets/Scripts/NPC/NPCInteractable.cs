@@ -19,6 +19,7 @@ using UnityEngine.UI;
 ///   同一段话可以设「第一次说 / 以后再说」，说完还能触发一个 UnityEvent
 ///   （以后接任务、送礼、开店都从这个事件往外长）。
 /// </summary>
+[DefaultExecutionOrder(-10)]
 public class NPCInteractable : MonoBehaviour
 {
     [Header("身份")]
@@ -45,6 +46,9 @@ public class NPCInteractable : MonoBehaviour
     [Tooltip("对话按键")]
     public KeyCode interactKey = KeyCode.E;
 
+    [Tooltip("勾选 = 鼠标左键也能对话（靠近时左键优先触发对话而非攻击）")]
+    public bool enableMouseClick = true;
+
     [Header("头顶提示")]
     public bool showPrompt = true;
     [Tooltip("提示文字")]
@@ -70,6 +74,7 @@ public class NPCInteractable : MonoBehaviour
 
     private bool _promptVisible;
     private bool _talked;
+    private bool _inRange;
 
     /// <summary>找不到玩家时不要每帧全场搜索，隔一会儿再找一次</summary>
     private float _searchCooldown;
@@ -85,11 +90,22 @@ public class NPCInteractable : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         _player = null;   // 换场景了，缓存的玩家不能再用
+        _inRange = false;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (_inRange)
+            InteractionSystem.UnregisterInRange(this);
+        _inRange = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (_inRange)
+            InteractionSystem.UnregisterInRange(this);
+        _inRange = false;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -117,6 +133,14 @@ public class NPCInteractable : MonoBehaviour
         bool inRange = dist <= interactRange;
         bool usable = !(talkOnlyOnce && _talked);
 
+        bool wasInRange = _inRange;
+        _inRange = inRange && usable;
+
+        if (_inRange && !wasInRange)
+            InteractionSystem.RegisterInRange(this);
+        else if (!_inRange && wasInRange)
+            InteractionSystem.UnregisterInRange(this);
+
         if (showPrompt) SetPromptVisible(inRange && usable && !DialogueManager.IsOpen);
 
         if (facePlayer && inRange && _sr != null)
@@ -128,9 +152,12 @@ public class NPCInteractable : MonoBehaviour
         if (!inRange || !usable) return;
         if (SceneTransition.InputBlocked) return;
         if (DialogueManager.IsOpen) return;
-        if (!Input.GetKeyDown(interactKey)) return;
 
-        Talk();
+        bool keyPressed = Input.GetKeyDown(interactKey);
+        bool mousePressed = enableMouseClick && Input.GetMouseButtonDown(0);
+
+        if (keyPressed || mousePressed)
+            Talk();
     }
 
     private void OnDrawGizmosSelected()

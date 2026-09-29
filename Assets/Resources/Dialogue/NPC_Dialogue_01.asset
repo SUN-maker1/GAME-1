@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4868ce272cd01f45ae3fc3f7e563c7e, type: 3}
+  m_Name: NPC_Dialogue_01
+  m_EditorClassIdentifier: 
+  lines:
+  - characterName: 1
+    dialogueText: "\u4F60\u597D\u5440"
+    portrait: {fileID: 21300000, guid: 3e01f895b87da6840957b90c695a2b9e, type: 3}
+    boxStyle: {fileID: 21300000, guid: 77b48f0dd9537024090525fcae935e41, type: 3}
+  - characterName: 23
+    dialogueText: "\u6211\u4E0D\u597D"
+    portrait: {fileID: 21300000, guid: b8b72891502e7d644b89e07cad5fab0a, type: 3}
+    boxStyle: {fileID: 21300000, guid: 77b48f0dd9537024090525fcae935e41, type: 3}

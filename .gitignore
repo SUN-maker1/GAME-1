@@ -18,3 +18,7 @@
 Thumbs.db
 .DS_Store
 ignore.conf
+
+# Local helper scripts
+push_to_github.bat
+pull_from_github.bat
