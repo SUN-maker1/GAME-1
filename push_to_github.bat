@@ -18,9 +18,6 @@ if "!ec1!"=="0" if "!ec2!"=="0" (
     echo [OK] user.email = 1264257086@qq.com
 ) else (
     echo [WARN] Failed to set git config. ec_name=!ec1! ec_email=!ec2!
-    echo        Try running these two commands manually in terminal:
-    echo          git config --global user.name "SUN-maker1"
-    echo          git config --global user.email "1264257086@qq.com"
 )
 echo.
 
@@ -69,19 +66,24 @@ if "!ec!"=="0" (
 )
 echo.
 
-REM ---------- Step 4: git push ----------
+REM ---------- Step 4: git push (disable browser GCM, use terminal prompt) ----------
 echo [Step 4/4] Pushing to https://github.com/SUN-maker1/GAME-1.git ...
-echo           If a login window pops up, enter your GitHub username
-echo           and your Personal Access Token (NOT your password).
 echo.
-git push https://github.com/SUN-maker1/GAME-1.git
+echo   IMPORTANT:
+echo   - When asked "Username for 'https://github.com':" type: SUN-maker1
+echo   - When asked "Password for ...:" RIGHT-CLICK to paste your
+echo     GitHub Personal Access Token (ghp_xxxx). NOT your login password.
+echo     (Pasted text will NOT show on screen - that is normal, just press Enter)
+echo.
+git -c credential.helper= push https://github.com/SUN-maker1/GAME-1.git
 set "ec=!errorlevel!"
 if not "!ec!"=="0" (
     echo.
     echo [FAIL] git push failed! Errorcode: !ec!
     echo [Possible reasons]
-    echo   1. Network cannot reach github.com
-    echo   2. Auth failed - need Personal Access Token, not password
+    echo   1. You pasted your login password instead of a Personal Access Token
+    echo      - Create one at: https://github.com/settings/tokens/new?scopes=repo
+    echo   2. Network cannot reach github.com (check proxy / VPN)
     echo   3. Remote has new commits - run: git pull https://github.com/SUN-maker1/GAME-1.git --rebase
     echo   4. Wrong repo URL or no write permission
 ) else (
