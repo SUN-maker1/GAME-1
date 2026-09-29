@@ -10,38 +10,28 @@ echo.
 REM ---------- Step 0: Set Git global user config ----------
 echo [Step 0/4] Setting Git global user.name and user.email ...
 git config --global user.name "SUN-maker1"
-set "ec1=!errorlevel!"
 git config --global user.email "1264257086@qq.com"
-set "ec2=!errorlevel!"
-if "!ec1!"=="0" if "!ec2!"=="0" (
-    echo [OK] user.name  = SUN-maker1
-    echo [OK] user.email = 1264257086@qq.com
-) else (
-    echo [WARN] Failed to set git config. ec_name=!ec1! ec_email=!ec2!
-)
+echo [OK] user.name=SUN-maker1  user.email=1264257086@qq.com
 echo.
 
 REM ---------- Step 1: git add . ----------
 echo [Step 1/4] Running: git add .
-echo.
 git add .
 set "ec=!errorlevel!"
 if not "!ec!"=="0" (
     echo [FAIL] git add . failed! Errorcode: !ec!
-    echo [Reason] Current folder is not a Git repo, or files are locked / no permission.
-    echo.
+    echo [Reason] Current folder is not a Git repo, or files are locked.
     pause
     exit /b 1
 )
-echo [OK] git add . done. All changes staged.
+echo [OK] git add . done.
 echo.
 
 REM ---------- Step 2: input commit message ----------
-echo [Step 2/4] Please type your commit message:
+echo [Step 2/4] Type your commit message:
 set /p "commit_msg=  Message: "
 if "!commit_msg!"=="" (
-    echo [FAIL] Commit message is empty. Cancelled.
-    echo.
+    echo [FAIL] Empty message. Cancelled.
     pause
     exit /b 1
 )
@@ -49,47 +39,34 @@ echo.
 
 REM ---------- Step 3: git commit ----------
 echo [Step 3/4] Running: git commit -m "!commit_msg!"
-echo.
 git commit -m "!commit_msg!"
 set "ec=!errorlevel!"
 if "!ec!"=="0" (
     echo [OK] git commit done.
 ) else if "!ec!"=="1" (
-    echo [INFO] Nothing to commit - no changes since last commit.
-    echo        Will still try to push to remote.
+    echo [INFO] Nothing to commit - will still try push.
 ) else (
     echo [FAIL] git commit failed! Errorcode: !ec!
-    echo [Reason] Git user.name/user.email not configured, or there are conflict files.
-    echo.
     pause
     exit /b 1
 )
 echo.
 
-REM ---------- Step 4: git push (disable browser GCM, use terminal prompt) ----------
-echo [Step 4/4] Pushing to https://github.com/SUN-maker1/GAME-1.git ...
-echo.
-echo   IMPORTANT:
-echo   - When asked "Username for 'https://github.com':" type: SUN-maker1
-echo   - When asked "Password for ...:" RIGHT-CLICK to paste your
-echo     GitHub Personal Access Token (ghp_xxxx). NOT your login password.
-echo     (Pasted text will NOT show on screen - that is normal, just press Enter)
-echo.
-git -c credential.helper= push https://github.com/SUN-maker1/GAME-1.git
+REM ---------- Step 4: git push ----------
+echo [Step 4/4] Pushing to GitHub ...
+git push origin main
 set "ec=!errorlevel!"
 if not "!ec!"=="0" (
     echo.
     echo [FAIL] git push failed! Errorcode: !ec!
     echo [Possible reasons]
-    echo   1. You pasted your login password instead of a Personal Access Token
-    echo      - Create one at: https://github.com/settings/tokens/new?scopes=repo
-    echo   2. Network cannot reach github.com (check proxy / VPN)
-    echo   3. Remote has new commits - run: git pull https://github.com/SUN-maker1/GAME-1.git --rebase
-    echo   4. Wrong repo URL or no write permission
+    echo   1. Network issue - check internet / proxy
+    echo   2. Remote has new commits - run: git pull origin main --rebase
+    echo   3. Token expired - regenerate at https://github.com/settings/tokens
 ) else (
     echo.
     echo ============================================
-    echo   [DONE] Code pushed to GitHub successfully!
+    echo   [DONE] Pushed to GitHub successfully!
     echo ============================================
 )
 echo.
